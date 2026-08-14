@@ -1,17 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: events-service
+  name: inframonitor-namespace
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
   source:
     repoURL: https://github.com/teejayade2244/inframonitor-gitops.git
     targetRevision: main
-    path: charts/events-service
+    path: charts/inframonitor-namespace
   destination:
     server: https://kubernetes.default.svc
-    namespace: inframonitor
+    namespace: default
   syncPolicy:
     automated:
       prune: true

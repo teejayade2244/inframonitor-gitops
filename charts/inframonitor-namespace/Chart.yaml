@@ -1,0 +1,4 @@
+apiVersion: v2
+name: inframonitor-namespace
+description: Shared namespace for InfraMonitor AKS workloads
+version: 0.1.0
