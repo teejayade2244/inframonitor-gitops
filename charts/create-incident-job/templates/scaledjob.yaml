@@ -1,0 +1,39 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledJob
+metadata:
+  name: create-incident-job
+  namespace: {{ .Values.namespace }}
+spec:
+  jobTargetRef:
+    template:
+      metadata:
+        labels:
+          azure.workload.identity/use: "true"
+      spec:
+        serviceAccountName: {{ .Values.serviceAccountName }}
+        restartPolicy: Never
+        containers:
+          - name: create-incident-job
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            env:
+              - name: COSMOS_ENDPOINT
+                value: "{{ .Values.env.COSMOS_ENDPOINT }}"
+              - name: SERVICEBUS_NAMESPACE
+                value: "{{ .Values.env.SERVICEBUS_NAMESPACE }}"
+              - name: AZURE_CLIENT_ID
+                value: "{{ .Values.env.AZURE_CLIENT_ID }}"
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+  pollingInterval: {{ .Values.scaling.pollingInterval }}
+  minReplicaCount: {{ .Values.scaling.minReplicaCount }}
+  maxReplicaCount: {{ .Values.scaling.maxReplicaCount }}
+  triggers:
+    - type: azure-servicebus
+      metadata:
+        namespace: {{ .Values.env.SERVICEBUS_NAMESPACE }}
+        topicName: {{ .Values.serviceBusTopic }}
+        subscriptionName: {{ .Values.serviceBusSubscription }}
+        queueLength: "{{ .Values.scaling.queueLength }}"
+      authenticationRef:
+        name: create-incident-job-trigger-auth

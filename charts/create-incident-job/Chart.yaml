@@ -1,0 +1,5 @@
+apiVersion: v2
+name: create-incident-job
+description: Event-driven job that creates incidents from Service Bus messages
+version: 0.1.0
+appVersion: "1.0"
