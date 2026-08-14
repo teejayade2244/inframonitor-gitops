@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-service
+  namespace: inframonitor
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: events-service
+  template:
+    metadata:
+      labels:
+        app: events-service
+        azure.workload.identity/use: "true"
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      containers:
+        - name: events-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: COSMOS_ENDPOINT
+              value: "{{ .Values.env.COSMOS_ENDPOINT }}"
+            - name: SERVICEBUS_NAMESPACE
+              value: "{{ .Values.env.SERVICEBUS_NAMESPACE }}"
+            - name: AZURE_CLIENT_ID
+              value: "{{ .Values.env.AZURE_CLIENT_ID }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

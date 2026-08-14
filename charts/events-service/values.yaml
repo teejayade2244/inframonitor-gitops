@@ -1,0 +1,22 @@
+replicaCount: 1
+namespace: inframonitor
+serviceAccountName: events-service-sa
+image:
+  repository: inframonitoraksacr.azurecr.io/events-service
+  tag: v1
+  pullPolicy: IfNotPresent
+env:
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
+  SERVICEBUS_NAMESPACE: "inframonitor-aks-svcbus.servicebus.windows.net"
+  AZURE_CLIENT_ID: "66e64342-7894-4bf0-8047-8598259734e2"
+
+service:
+  port: 3000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi

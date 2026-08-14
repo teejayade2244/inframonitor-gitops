@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: events-service
+  namespace: inframonitor
+spec:
+  selector:
+    app: events-service
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
