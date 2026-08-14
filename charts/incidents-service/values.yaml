@@ -1,0 +1,25 @@
+namespace: inframonitor
+
+replicaCount: 1
+
+image:
+  repository: inframonitoraksacr.azurecr.io/incidents-service
+  tag: v1
+  pullPolicy: IfNotPresent
+
+serviceAccountName: incidents-service-sa
+
+env:
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
+  AZURE_CLIENT_ID: "689de83f-23a8-4a2f-9d61-6fc5ea8e963b"
+
+service:
+  port: 3000
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 256Mi
+  limits:
+    cpu: 300m
+    memory: 512Mi

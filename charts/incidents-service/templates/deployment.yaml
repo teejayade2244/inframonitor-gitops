@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incidents-service
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: incidents-service
+  template:
+    metadata:
+      labels:
+        app: incidents-service
+        azure.workload.identity/use: "true"
+    spec:
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      containers:
+        - name: incidents-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: COSMOS_ENDPOINT
+              value: "{{ .Values.env.COSMOS_ENDPOINT }}"
+            - name: AZURE_CLIENT_ID
+              value: "{{ .Values.env.AZURE_CLIENT_ID }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
