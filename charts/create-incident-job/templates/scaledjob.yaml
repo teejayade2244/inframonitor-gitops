@@ -31,7 +31,10 @@ spec:
   triggers:
     - type: azure-servicebus
       metadata:
-        namespace: {{ .Values.env.SERVICEBUS_NAMESPACE }}
+        # KEDA's azure-servicebus scaler wants the bare namespace name and appends
+        # ".servicebus.windows.net" itself - env.SERVICEBUS_NAMESPACE is the fully-qualified
+        # form the app's own Service Bus SDK client needs, so it can't be reused as-is here.
+        namespace: {{ .Values.env.SERVICEBUS_NAMESPACE | trimSuffix ".servicebus.windows.net" }}
         topicName: {{ .Values.serviceBusTopic }}
         subscriptionName: {{ .Values.serviceBusSubscription }}
         queueLength: "{{ .Values.scaling.queueLength }}"
