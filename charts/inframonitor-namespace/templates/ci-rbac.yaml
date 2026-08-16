@@ -7,6 +7,14 @@ rules:
   - apiGroups: ["", "apps"]
     resources: ["pods", "deployments", "replicasets"]
     verbs: ["get", "list", "watch"]
+  # kubectl port-forward is a `create` on the pods/portforward subresource, not covered by the
+  # get/list/watch on pods above - confirmed via a real 403 from a live smoke-test run. Pod names
+  # include a rollout-specific hash suffix that changes every deploy, so this can't be scoped to
+  # a specific resourceName the way the ArgoCD refresh RBAC is - namespace-bound is the practical
+  # least-privilege boundary here.
+  - apiGroups: [""]
+    resources: ["pods/portforward"]
+    verbs: ["create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
