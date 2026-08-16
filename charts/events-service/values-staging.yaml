@@ -4,10 +4,8 @@
 namespace: inframonitor
 replicaCount: 1
 serviceAccountName: events-service-sa
-
 image:
-  tag: v1
-
+  tag: 2f8545a
 env:
   COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
   COSMOS_DATABASE: "InfraMonitorDB"
