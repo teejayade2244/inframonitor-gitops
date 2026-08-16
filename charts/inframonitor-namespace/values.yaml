@@ -1,3 +1,9 @@
 namespaces:
   - inframonitor
   - inframonitor-production
+
+# principalId (object ID) of events-service-smoke-test-identity, will be provided.
+# See templates/ci-rbac.yaml for an important caveat on whether "kind: User" + this raw
+# objectId is actually the correct RoleBinding subject format for a non-human (managed
+# identity) principal on this Entra ID-integrated cluster - not fully verified, see that file.
+ciSmokeTestPrincipalId: "<principalId of events-service-smoke-test-identity, will be provided>"
