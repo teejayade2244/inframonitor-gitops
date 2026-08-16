@@ -1,0 +1,24 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: smoke-test-argocd-refresher
+  namespace: argocd
+rules:
+  - apiGroups: ["argoproj.io"]
+    resources: ["applications"]
+    resourceNames: ["events-service-staging"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: smoke-test-argocd-refresher-binding
+  namespace: argocd
+subjects:
+  - kind: User
+    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: smoke-test-argocd-refresher
+  apiGroup: rbac.authorization.k8s.io
