@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: events-service
-  namespace: inframonitor
+  namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -24,8 +24,12 @@ spec:
           env:
             - name: COSMOS_ENDPOINT
               value: "{{ .Values.env.COSMOS_ENDPOINT }}"
+            - name: COSMOS_DATABASE
+              value: "{{ .Values.env.COSMOS_DATABASE }}"
             - name: SERVICEBUS_NAMESPACE
               value: "{{ .Values.env.SERVICEBUS_NAMESPACE }}"
+            - name: SERVICEBUS_TOPIC
+              value: "{{ .Values.env.SERVICEBUS_TOPIC }}"
             - name: AZURE_CLIENT_ID
               value: "{{ .Values.env.AZURE_CLIENT_ID }}"
           resources:

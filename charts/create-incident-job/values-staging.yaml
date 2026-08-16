@@ -1,0 +1,20 @@
+namespace: inframonitor
+serviceAccountName: create-incident-job-sa
+
+image:
+  tag: v1
+
+env:
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
+  COSMOS_DATABASE: "InfraMonitorDB"
+  SERVICEBUS_NAMESPACE: "inframonitor-aks-svcbus.servicebus.windows.net"
+  AZURE_CLIENT_ID: "e1e4bb8d-baa5-4899-b5ea-65ca150d5d00"
+
+serviceBusSubscription: create-incident
+serviceBusTopic: infrastructure-events
+
+scaling:
+  minReplicaCount: 0
+  maxReplicaCount: 5
+  pollingInterval: 15
+  queueLength: 5

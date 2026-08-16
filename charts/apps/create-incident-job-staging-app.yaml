@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: events-service
+  name: create-incident-job-staging
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -10,7 +10,11 @@ spec:
   source:
     repoURL: https://github.com/teejayade2244/inframonitor-gitops.git
     targetRevision: main
-    path: charts/events-service
+    path: charts/create-incident-job
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-staging.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: inframonitor

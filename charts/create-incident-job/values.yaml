@@ -1,19 +1,9 @@
-namespace: inframonitor
-
+# Shared, non-environment-specific defaults only. Merged with values-staging.yaml or
+# values-production.yaml at install/upgrade time via -f - everything that differs (or could
+# ever plausibly differ) between environments lives in those files instead.
 image:
   repository: inframonitoraksacr.azurecr.io/create-incident-job
-  tag: v1
   pullPolicy: IfNotPresent
-
-serviceAccountName: create-incident-job-sa
-
-env:
-  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
-  SERVICEBUS_NAMESPACE: "inframonitor-aks-svcbus.servicebus.windows.net"
-  AZURE_CLIENT_ID: "e1e4bb8d-baa5-4899-b5ea-65ca150d5d00"
-
-serviceBusSubscription: create-incident
-serviceBusTopic: infrastructure-events
 
 resources:
   requests:
@@ -22,9 +12,3 @@ resources:
   limits:
     cpu: 250m
     memory: 256Mi
-
-scaling:
-  minReplicaCount: 0
-  maxReplicaCount: 5
-  pollingInterval: 15
-  queueLength: 5

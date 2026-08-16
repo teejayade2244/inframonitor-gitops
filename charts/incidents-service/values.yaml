@@ -1,17 +1,9 @@
-namespace: inframonitor
-
-replicaCount: 1
-
+# Shared, non-environment-specific defaults only. Merged with values-staging.yaml or
+# values-production.yaml at install/upgrade time via -f - everything that differs (or could
+# ever plausibly differ) between environments lives in those files instead.
 image:
   repository: inframonitoraksacr.azurecr.io/incidents-service
-  tag: v1
   pullPolicy: IfNotPresent
-
-serviceAccountName: incidents-service-sa
-
-env:
-  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
-  AZURE_CLIENT_ID: "689de83f-23a8-4a2f-9d61-6fc5ea8e963b"
 
 service:
   port: 3000

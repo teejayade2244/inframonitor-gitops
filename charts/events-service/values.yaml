@@ -1,14 +1,9 @@
-replicaCount: 1
-namespace: inframonitor
-serviceAccountName: events-service-sa
+# Shared, non-environment-specific defaults only. Merged with values-staging.yaml or
+# values-production.yaml at install/upgrade time via -f - everything that differs (or could
+# ever plausibly differ) between environments lives in those files instead.
 image:
   repository: inframonitoraksacr.azurecr.io/events-service
-  tag: v1
   pullPolicy: IfNotPresent
-env:
-  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
-  SERVICEBUS_NAMESPACE: "inframonitor-aks-svcbus.servicebus.windows.net"
-  AZURE_CLIENT_ID: "66e64342-7894-4bf0-8047-8598259734e2"
 
 service:
   port: 3000

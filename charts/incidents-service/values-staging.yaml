@@ -1,0 +1,14 @@
+# Staging is the formal name for what has, until now, been the only (undifferentiated)
+# deployment of this chart. Every value here is byte-for-byte what values.yaml used to contain -
+# nothing about the live inframonitor namespace deployment changes when this file is used.
+namespace: inframonitor
+replicaCount: 1
+serviceAccountName: incidents-service-sa
+
+image:
+  tag: v1
+
+env:
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
+  COSMOS_DATABASE: "InfraMonitorDB"
+  AZURE_CLIENT_ID: "689de83f-23a8-4a2f-9d61-6fc5ea8e963b"

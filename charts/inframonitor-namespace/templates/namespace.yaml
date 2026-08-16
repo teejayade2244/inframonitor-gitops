@@ -1,6 +1,9 @@
+{{- range .Values.namespaces }}
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: inframonitor
+  name: {{ . }}
   annotations:
     argocd.argoproj.io/sync-wave: "0"
+---
+{{- end }}

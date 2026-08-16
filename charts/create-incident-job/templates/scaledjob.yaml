@@ -19,8 +19,17 @@ spec:
             env:
               - name: COSMOS_ENDPOINT
                 value: "{{ .Values.env.COSMOS_ENDPOINT }}"
+              - name: COSMOS_DATABASE
+                value: "{{ .Values.env.COSMOS_DATABASE }}"
               - name: SERVICEBUS_NAMESPACE
                 value: "{{ .Values.env.SERVICEBUS_NAMESPACE }}"
+              # Reuses the same values that already drive the KEDA trigger metadata below -
+              # single source of truth for "which topic/subscription" rather than a second,
+              # separate value that could drift from what the autoscaler is actually watching.
+              - name: SERVICEBUS_TOPIC
+                value: "{{ .Values.serviceBusTopic }}"
+              - name: SERVICEBUS_SUBSCRIPTION
+                value: "{{ .Values.serviceBusSubscription }}"
               - name: AZURE_CLIENT_ID
                 value: "{{ .Values.env.AZURE_CLIENT_ID }}"
             resources:

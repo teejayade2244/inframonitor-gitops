@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: create-incident-job
+  name: create-incident-job-production
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -11,9 +11,13 @@ spec:
     repoURL: https://github.com/teejayade2244/inframonitor-gitops.git
     targetRevision: main
     path: charts/create-incident-job
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-production.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: inframonitor
+    namespace: inframonitor-production
   syncPolicy:
     automated:
       prune: true

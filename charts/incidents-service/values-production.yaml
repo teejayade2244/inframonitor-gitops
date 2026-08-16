@@ -1,0 +1,16 @@
+namespace: inframonitor-production
+replicaCount: 1
+serviceAccountName: incidents-service-sa
+
+image:
+  # CD overrides this via --set at deploy time, per release - never edit this file per release.
+  tag: REPLACE_ME
+
+env:
+  # Same Cosmos account and Service Bus namespace as staging - only the database name differs,
+  # since the account itself is shared across environments.
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
+  COSMOS_DATABASE: "InfraMonitorProdDB"
+  # Same managed identity as staging - deliberate scope simplification for this project,
+  # not a mistake. Staging and production share the same underlying Azure identities.
+  AZURE_CLIENT_ID: "689de83f-23a8-4a2f-9d61-6fc5ea8e963b"

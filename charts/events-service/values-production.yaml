@@ -1,0 +1,18 @@
+namespace: inframonitor-production
+replicaCount: 1
+serviceAccountName: events-service-sa
+
+image:
+  # CD overrides this via --set at deploy time, per release - never edit this file per release.
+  tag: REPLACE_ME
+
+env:
+  # Same Cosmos account and Service Bus namespace as staging - only the database/topic names
+  # differ, since the account/namespace itself is shared across environments.
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
+  COSMOS_DATABASE: "InfraMonitorProdDB"
+  SERVICEBUS_NAMESPACE: "inframonitor-aks-svcbus.servicebus.windows.net"
+  SERVICEBUS_TOPIC: "infrastructure-events-prod"
+  # Same managed identity as staging - deliberate scope simplification for this project,
+  # not a mistake. Staging and production share the same underlying Azure identities.
+  AZURE_CLIENT_ID: "66e64342-7894-4bf0-8047-8598259734e2"
