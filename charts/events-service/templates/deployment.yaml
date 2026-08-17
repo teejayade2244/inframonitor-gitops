@@ -32,5 +32,19 @@ spec:
               value: "{{ .Values.env.SERVICEBUS_TOPIC }}"
             - name: AZURE_CLIENT_ID
               value: "{{ .Values.env.AZURE_CLIENT_ID }}"
+          # Without this, Kubernetes marks the container Ready as soon as the process starts,
+          # not when it's actually listening - server.js does appInsights/dotenv setup and
+          # module loading before app.listen(), a real window where Ready is true but nothing
+          # answers the port yet. Confirmed via a live smoke-test run: kubectl port-forward hit
+          # "connection refused" against a pod already reporting Ready. Affects real traffic too,
+          # not just the smoke test - the Service routes to any Ready pod.
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
