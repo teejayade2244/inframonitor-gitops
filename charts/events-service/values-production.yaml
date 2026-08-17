@@ -1,11 +1,9 @@
 namespace: inframonitor-production
 replicaCount: 1
 serviceAccountName: events-service-sa
-
 image:
   # CD overrides this via --set at deploy time, per release - never edit this file per release.
-  tag: REPLACE_ME
-
+  tag: 9a24e72
 env:
   # Same Cosmos account and Service Bus namespace as staging - only the database/topic names
   # differ, since the account/namespace itself is shared across environments.
