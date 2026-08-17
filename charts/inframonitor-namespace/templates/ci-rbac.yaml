@@ -7,11 +7,6 @@ rules:
   - apiGroups: ["", "apps"]
     resources: ["pods", "deployments", "replicasets"]
     verbs: ["get", "list", "watch"]
-  # kubectl port-forward is a `create` on the pods/portforward subresource, not covered by the
-  # get/list/watch on pods above - confirmed via a real 403 from a live smoke-test run. Pod names
-  # include a rollout-specific hash suffix that changes every deploy, so this can't be scoped to
-  # a specific resourceName the way the ArgoCD refresh RBAC is - namespace-bound is the practical
-  # least-privilege boundary here.
   - apiGroups: [""]
     resources: ["pods/portforward"]
     verbs: ["create"]
@@ -21,6 +16,38 @@ kind: RoleBinding
 metadata:
   name: smoke-test-reader-binding
   namespace: inframonitor
+subjects:
+  - kind: User
+    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: smoke-test-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+# Duplicated (not merged into a single namespaced Role, since Roles are namespace-scoped and
+# can't span two namespaces) for inframonitor-production - same identity, same rules, only the
+# namespace differs, so the production smoke test job in
+# events-service-production-promotion.yml has the same pod-read/portforward access staging
+# already had.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: smoke-test-reader
+  namespace: inframonitor-production
+rules:
+  - apiGroups: ["", "apps"]
+    resources: ["pods", "deployments", "replicasets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/portforward"]
+    verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: smoke-test-reader-binding
+  namespace: inframonitor-production
 subjects:
   - kind: User
     name: {{ .Values.ciSmokeTestPrincipalId | quote }}

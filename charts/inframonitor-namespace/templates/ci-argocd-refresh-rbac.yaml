@@ -22,3 +22,32 @@ roleRef:
   kind: Role
   name: smoke-test-argocd-refresher
   apiGroup: rbac.authorization.k8s.io
+---
+# Separate Role (not an added resourceName on the one above) because Role/RoleBinding names must
+# be unique within a namespace and both land in argocd - same pattern as staging's, just scoped
+# to the events-service-production Application instead, for the production promotion workflow's
+# smoke test.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: smoke-test-argocd-refresher-production
+  namespace: argocd
+rules:
+  - apiGroups: ["argoproj.io"]
+    resources: ["applications"]
+    resourceNames: ["events-service-production"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: smoke-test-argocd-refresher-production-binding
+  namespace: argocd
+subjects:
+  - kind: User
+    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: smoke-test-argocd-refresher-production
+  apiGroup: rbac.authorization.k8s.io
