@@ -11,25 +11,29 @@ rules:
     resources: ["pods/portforward"]
     verbs: ["create"]
 ---
+# One shared Role (not per-service): pod names carry a rollout-specific hash suffix that changes
+# every deploy, so this can't be scoped to a specific resourceName per service the way the
+# ArgoCD refresh permission below can - namespace-bound read/portforward is the practical
+# least-privilege boundary regardless of which service a given smoke-test identity belongs to.
+# Every identity in ciSmokeTestIdentitiesStaging gets the same access via multiple subjects on
+# this one RoleBinding, rather than a Role/RoleBinding pair duplicated per service.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: smoke-test-reader-binding
   namespace: inframonitor
 subjects:
+  {{- range $service, $principalId := .Values.ciSmokeTestIdentitiesStaging }}
   - kind: User
-    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    name: {{ $principalId | quote }}
     apiGroup: rbac.authorization.k8s.io
+  {{- end }}
 roleRef:
   kind: Role
   name: smoke-test-reader
   apiGroup: rbac.authorization.k8s.io
 ---
-# Duplicated (not merged into a single namespaced Role, since Roles are namespace-scoped and
-# can't span two namespaces) for inframonitor-production - same identity, same rules, only the
-# namespace differs, so the production smoke test job in
-# events-service-production-promotion.yml has the same pod-read/portforward access staging
-# already had.
+
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -49,9 +53,11 @@ metadata:
   name: smoke-test-reader-binding
   namespace: inframonitor-production
 subjects:
+  {{- range $service, $principalId := .Values.ciSmokeTestIdentitiesProduction }}
   - kind: User
-    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    name: {{ $principalId | quote }}
     apiGroup: rbac.authorization.k8s.io
+  {{- end }}
 roleRef:
   kind: Role
   name: smoke-test-reader

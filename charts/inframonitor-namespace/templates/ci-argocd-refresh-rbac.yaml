@@ -1,53 +1,61 @@
+# Unlike ci-rbac.yaml's shared pod-read Role, this permission genuinely is per-service: each
+# rule is scoped by resourceName to one specific ArgoCD Application, so a separate Role/
+# RoleBinding pair per (service, environment) is the real shape of the grant, not just a
+# stylistic choice - a shared Role here would mean listing every service's Application name in
+# every identity's rule, defeating the scoping. Looped from the same
+# ciSmokeTestIdentitiesStaging/ciSmokeTestIdentitiesProduction maps ci-rbac.yaml uses, so adding
+# a new service's smoke-test RBAC across both files is always a values.yaml-only change.
+{{- range $service, $principalId := .Values.ciSmokeTestIdentitiesStaging }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: smoke-test-argocd-refresher
+  name: smoke-test-argocd-refresher-{{ $service }}-staging
   namespace: argocd
 rules:
   - apiGroups: ["argoproj.io"]
     resources: ["applications"]
-    resourceNames: ["events-service-staging"]
+    resourceNames: ["{{ $service }}-staging"]
     verbs: ["get", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: smoke-test-argocd-refresher-binding
+  name: smoke-test-argocd-refresher-{{ $service }}-staging-binding
   namespace: argocd
 subjects:
   - kind: User
-    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    name: {{ $principalId | quote }}
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
-  name: smoke-test-argocd-refresher
+  name: smoke-test-argocd-refresher-{{ $service }}-staging
   apiGroup: rbac.authorization.k8s.io
 ---
-# Separate Role (not an added resourceName on the one above) because Role/RoleBinding names must
-# be unique within a namespace and both land in argocd - same pattern as staging's, just scoped
-# to the events-service-production Application instead, for the production promotion workflow's
-# smoke test.
+{{- end }}
+{{- range $service, $principalId := .Values.ciSmokeTestIdentitiesProduction }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: smoke-test-argocd-refresher-production
+  name: smoke-test-argocd-refresher-{{ $service }}-production
   namespace: argocd
 rules:
   - apiGroups: ["argoproj.io"]
     resources: ["applications"]
-    resourceNames: ["events-service-production"]
+    resourceNames: ["{{ $service }}-production"]
     verbs: ["get", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: smoke-test-argocd-refresher-production-binding
+  name: smoke-test-argocd-refresher-{{ $service }}-production-binding
   namespace: argocd
 subjects:
   - kind: User
-    name: {{ .Values.ciSmokeTestPrincipalId | quote }}
+    name: {{ $principalId | quote }}
     apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: Role
-  name: smoke-test-argocd-refresher-production
+  name: smoke-test-argocd-refresher-{{ $service }}-production
   apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}
