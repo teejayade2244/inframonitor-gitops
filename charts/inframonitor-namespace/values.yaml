@@ -13,7 +13,4 @@ ciSmokeTestIdentitiesStaging:
   incidents-service: "07ee7787-e446-46fc-803f-5282cad0362f"
 ciSmokeTestIdentitiesProduction:
   events-service: "37ea29f7-4b13-40af-a08c-1cdebc4df895"
-  # TEMPORARY: deliberately removed to simulate a production RBAC failure and verify
-  # rollback-production actually reverts to a real, prior verified-good tag - restore immediately
-  # after the test.
-  # incidents-service: "07ee7787-e446-46fc-803f-5282cad0362f"
+  incidents-service: "07ee7787-e446-46fc-803f-5282cad0362f"
