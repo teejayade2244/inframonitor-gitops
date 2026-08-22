@@ -7,10 +7,10 @@ namespaces:
 # source is obviously scoped to what it grants: the inframonitor-namespace Role/RoleBinding pair
 # and the ArgoCD Application refresh permission for staging come from
 # ciSmokeTestIdentitiesStaging; production from ciSmokeTestIdentitiesProduction. A service only
-# needs an entry in the map(s) for the environment(s) its smoke test actually covers - not every
-# service needs both (e.g. incidents-service is staging-only for now).
+# needs an entry in the map(s) for the environment(s) its smoke test actually covers.
 ciSmokeTestIdentitiesStaging:
   events-service: "37ea29f7-4b13-40af-a08c-1cdebc4df895"
   incidents-service: "07ee7787-e446-46fc-803f-5282cad0362f"
 ciSmokeTestIdentitiesProduction:
   events-service: "37ea29f7-4b13-40af-a08c-1cdebc4df895"
+  incidents-service: "07ee7787-e446-46fc-803f-5282cad0362f"
