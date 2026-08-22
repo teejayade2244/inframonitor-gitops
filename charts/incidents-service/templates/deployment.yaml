@@ -5,6 +5,10 @@ metadata:
   namespace: {{ .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  # Kubernetes defaults this to 10 when unset - each rollout keeps that many old ReplicaSets
+  # around (scaled to 0) to support kubectl rollout undo/history. Harmless (zero replicas, zero
+  # compute) but noisy in ArgoCD's resource tree, especially with this project's deploy cadence.
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: incidents-service
