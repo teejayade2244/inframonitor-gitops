@@ -3,7 +3,7 @@ replicaCount: 1
 serviceAccountName: events-service-sa
 image:
   # CD overrides this via --set at deploy time, per release - never edit this file per release.
-  tag: 9a24e72
+  tag: 6c8f9bc
 env:
   # Same Cosmos account and Service Bus namespace as staging - only the database/topic names
   # differ, since the account/namespace itself is shared across environments.
