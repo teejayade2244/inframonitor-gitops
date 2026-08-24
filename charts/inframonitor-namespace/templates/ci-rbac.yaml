@@ -10,6 +10,20 @@ rules:
   - apiGroups: [""]
     resources: ["pods/portforward"]
     verbs: ["create"]
+  # create-incident-job is a KEDA ScaledJob, not a Deployment - its smoke test polls the
+  # ScaledJob spec (to confirm the expected image tag synced) and the batch/v1 Job KEDA creates
+  # per execution (to confirm it ran and succeeded), not a Deployment/pod - it never
+  # port-forwards, since there's no long-running pod to reach. Added here rather than as a
+  # separate Role, consistent with this Role already being one shared, namespace-bound grant
+  # across every smoke-test identity rather than scoped per service (see the comment below) - a
+  # per-service Role would need pod names it can't get anyway, and jobs/scaledjobs read is
+  # harmless for events-service/incidents-service's identities to also hold.
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["keda.sh"]
+    resources: ["scaledjobs"]
+    verbs: ["get", "list", "watch"]
 ---
 # One shared Role (not per-service): pod names carry a rollout-specific hash suffix that changes
 # every deploy, so this can't be scoped to a specific resourceName per service the way the
