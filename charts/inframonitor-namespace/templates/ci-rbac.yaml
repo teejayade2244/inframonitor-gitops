@@ -60,6 +60,15 @@ rules:
   - apiGroups: [""]
     resources: ["pods/portforward"]
     verbs: ["create"]
+  # Same reasoning as the staging Role above - create-incident-job's production smoke test
+  # polls the ScaledJob spec and the batch/v1 Job KEDA creates per execution, not a
+  # Deployment/pod.
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["keda.sh"]
+    resources: ["scaledjobs"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
