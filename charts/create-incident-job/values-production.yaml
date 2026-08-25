@@ -1,10 +1,8 @@
 namespace: inframonitor-production
 serviceAccountName: create-incident-job-sa
-
 image:
   # CD overrides this via --set at deploy time, per release - never edit this file per release.
-  tag: REPLACE_ME
-
+  tag: 3001a32
 env:
   # Same Cosmos account and Service Bus namespace as staging - only the database/topic names
   # differ, since the account/namespace itself is shared across environments.
@@ -14,10 +12,8 @@ env:
   # Same managed identity as staging - deliberate scope simplification for this project,
   # not a mistake. Staging and production share the same underlying Azure identities.
   AZURE_CLIENT_ID: "e1e4bb8d-baa5-4899-b5ea-65ca150d5d00"
-
 serviceBusSubscription: create-incident-prod
 serviceBusTopic: infrastructure-events-prod
-
 scaling:
   minReplicaCount: 0
   maxReplicaCount: 5
