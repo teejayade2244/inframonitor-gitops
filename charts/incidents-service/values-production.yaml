@@ -3,7 +3,7 @@ replicaCount: 1
 serviceAccountName: incidents-service-sa
 image:
   # CD overrides this via --set at deploy time, per release - never edit this file per release.
-  tag: 6c8f9bc
+  tag: 7a920b5
 env:
   # Same Cosmos account and Service Bus namespace as staging - only the database name differs,
   # since the account itself is shared across environments.
