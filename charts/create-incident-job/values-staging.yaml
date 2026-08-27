@@ -1,7 +1,7 @@
 namespace: inframonitor
 serviceAccountName: create-incident-job-sa
 image:
-  tag: 7a920b5
+  tag: 2ee1ccd
 env:
   COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos-eastus2.documents.azure.com:443/"
   COSMOS_DATABASE: "InfraMonitorDB"
