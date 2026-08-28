@@ -16,6 +16,12 @@ spec:
       # genuinely failing run just gets picked up again by the next scheduled trigger anyway,
       # and the checkpoint mechanism makes that safe.
       backoffLimit: 1
+      # Confirmed for real: a pod stuck in ContainerCreating (e.g. a CSI volume mount that
+      # can't resolve) doesn't count against backoffLimit at all - kubelet just retries the
+      # mount indefinitely on the same pod, which never fails or completes. Without a deadline,
+      # concurrencyPolicy: Forbid would then block every future scheduled run behind one
+      # perpetually-stuck pod. 300s comfortably covers this job's real ~1-2 minute runtime.
+      activeDeadlineSeconds: 300
       template:
         metadata:
           labels:
