@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: metrics-collector
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  # A run that somehow takes longer than 15 minutes must not overlap the next scheduled one -
+  # both would race against the same CollectorState checkpoint documents.
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      # One retry for a transient failure (network blip, GitHub API hiccup) - not more, since a
+      # genuinely failing run just gets picked up again by the next scheduled trigger anyway,
+      # and the checkpoint mechanism makes that safe.
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            azure.workload.identity/use: "true"
+        spec:
+          serviceAccountName: {{ .Values.serviceAccountName }}
+          restartPolicy: Never
+          containers:
+            - name: metrics-collector
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              env:
+                - name: GITHUB_REPOSITORY
+                  value: "{{ .Values.env.GITHUB_REPOSITORY }}"
+                - name: COSMOS_ENDPOINT
+                  value: "{{ .Values.env.COSMOS_ENDPOINT }}"
+                - name: COSMOS_METRICS_DATABASE
+                  value: "{{ .Values.env.COSMOS_METRICS_DATABASE }}"
+                - name: AZURE_CLIENT_ID
+                  value: "{{ .Values.env.AZURE_CLIENT_ID }}"
+                - name: GH_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.keyVault.githubPatSecretName }}
+                      key: GH_TOKEN
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+              volumeMounts:
+                - name: secrets-store
+                  mountPath: "/mnt/secrets-store"
+                  readOnly: true
+          volumes:
+            - name: secrets-store
+              csi:
+                driver: secrets-store.csi.k8s.io
+                readOnly: true
+                volumeAttributes:
+                  secretProviderClass: metrics-collector-secrets

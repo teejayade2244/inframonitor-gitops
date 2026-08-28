@@ -1,0 +1,5 @@
+apiVersion: v2
+name: metrics-collector
+description: Scheduled CronJob that polls GitHub Actions run history for all three services and writes DORA/pipeline-timing data to Cosmos DB
+version: 0.1.0
+appVersion: "1.0"

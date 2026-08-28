@@ -1,0 +1,20 @@
+# Shared, non-environment-specific defaults only - same split as events-service/incidents-service/
+# create-incident-job's own values.yaml, merged with values-staging.yaml at install/upgrade time.
+# There's deliberately no values-production.yaml here: metrics-collector reads GitHub Actions
+# history once and writes to one shared Cosmos database regardless of environment. Deploying it
+# twice (once per namespace) would mean two CronJobs racing against the same checkpoint
+# container for no benefit - it's a singleton cluster utility, not a per-environment service.
+# The file is still named values-staging.yaml (not values.yaml) purely so
+# service-cd-template.yml's update-staging-values job - shared with the other three services,
+# hardcoded to that filename - can bump the image tag here the same way it does for everyone else.
+image:
+  repository: inframonitoraksacr.azurecr.io/metrics-collector
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi

@@ -1,0 +1,22 @@
+namespace: inframonitor
+serviceAccountName: metrics-collector-sa
+image:
+  tag: latest
+
+# Matches the GitHub Actions cron schedule this replaces exactly.
+schedule: "*/15 * * * *"
+
+env:
+  GITHUB_REPOSITORY: "teejayade2244/Cloud-Infrastructure-Monitoring-Alerting-Platform"
+  COSMOS_ENDPOINT: "https://inframonitor-aks-cosmos.documents.azure.com:443/"
+  COSMOS_METRICS_DATABASE: "InfraMonitorMetricsDB"
+  # metrics-collector-identity's own client ID - the same identity already holds Cosmos DB Data
+  # Contributor on the three InfraMonitorMetricsDB containers this pod writes to, container-scoped
+  # (not account-wide). Not the CD identity (AZURE_CLIENT_ID_METRICS_COLLECTOR_CD) - that one only
+  # ever pushes the built image to ACR from GitHub Actions, never runs inside the cluster.
+  AZURE_CLIENT_ID: "2ab1a291-2dbc-425d-9c5e-3a810f76427d"
+
+keyVault:
+  name: inframonitor-aks-kv
+  tenantId: "64593914-54b3-4e44-afea-3d2cabd7a205"
+  githubPatSecretName: metrics-collector-github-pat
