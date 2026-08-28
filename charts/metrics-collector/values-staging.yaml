@@ -13,6 +13,11 @@ env:
   # (not account-wide). Not the CD identity (AZURE_CLIENT_ID_METRICS_COLLECTOR_CD) - that one only
   # ever pushes the built image to ACR from GitHub Actions, never runs inside the cluster.
   AZURE_CLIENT_ID: "2ab1a291-2dbc-425d-9c5e-3a810f76427d"
+  # Verified via `kubectl get svc -n monitoring | grep pushgateway`, not assumed - the
+  # kube-prometheus-stack Pushgateway subchart's real Service name/port. Setting this flips
+  # computeDora()/pushDoraMetrics() in index.js from their gated no-op (previously always
+  # skipped - "no Pushgateway deployed yet") to actually firing on every run.
+  PUSHGATEWAY_URL: "http://pushgateway-prometheus-pushgateway.monitoring.svc.cluster.local:9091"
 keyVault:
   name: inframonitor-aks-kv
   tenantId: "64593914-54b3-4e44-afea-3d2cabd7a205"

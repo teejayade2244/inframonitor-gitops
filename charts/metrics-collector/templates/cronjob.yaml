@@ -16,7 +16,7 @@ spec:
       # genuinely failing run just gets picked up again by the next scheduled trigger anyway,
       # and the checkpoint mechanism makes that safe.
       backoffLimit: 1
-      # Confirmed for real: a pod stuck in ContainerCreating (e.g. a CSI volume mount that
+      # a pod stuck in ContainerCreating (e.g. a CSI volume mount that
       # can't resolve) doesn't count against backoffLimit at all - kubelet just retries the
       # mount indefinitely on the same pod, which never fails or completes. Without a deadline,
       # concurrencyPolicy: Forbid would then block every future scheduled run behind one
@@ -42,6 +42,10 @@ spec:
                   value: "{{ .Values.env.COSMOS_METRICS_DATABASE }}"
                 - name: AZURE_CLIENT_ID
                   value: "{{ .Values.env.AZURE_CLIENT_ID }}"
+                {{- if .Values.env.PUSHGATEWAY_URL }}
+                - name: PUSHGATEWAY_URL
+                  value: "{{ .Values.env.PUSHGATEWAY_URL }}"
+                {{- end }}
                 - name: GH_TOKEN
                   valueFrom:
                     secretKeyRef:
