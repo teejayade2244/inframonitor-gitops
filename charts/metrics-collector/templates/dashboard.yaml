@@ -125,6 +125,7 @@ data:
             "defaults": {
               "unit": "percentunit",
               "decimals": 1,
+              "noValue": "No deploys yet",
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -150,6 +151,7 @@ data:
             "defaults": {
               "unit": "percentunit",
               "decimals": 1,
+              "noValue": "No deploys yet",
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -175,6 +177,7 @@ data:
             "defaults": {
               "unit": "percentunit",
               "decimals": 1,
+              "noValue": "No deploys yet",
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
