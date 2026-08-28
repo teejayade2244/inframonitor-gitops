@@ -1,0 +1,308 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metrics-collector-dora-dashboard
+  namespace: {{ .Values.namespace }}
+  labels:
+    grafana_dashboard: "1"
+data:
+  dora-overview.json: |
+    {
+      "title": "DORA Metrics",
+      "uid": "metrics-collector-dora",
+      "schemaVersion": 39,
+      "timezone": "utc",
+      "editable": true,
+      "time": { "from": "now-24h", "to": "now" },
+      "refresh": "1m",
+      "panels": [
+        {
+          "type": "row",
+          "title": "DORA Overview",
+          "gridPos": { "x": 0, "y": 0, "w": 24, "h": 1 },
+          "id": 100,
+          "collapsed": false
+        },
+        {
+          "type": "text",
+          "title": "",
+          "gridPos": { "x": 0, "y": 1, "w": 24, "h": 2 },
+          "id": 101,
+          "options": {
+            "mode": "markdown",
+            "content": "_DORA's published Elite/High/Medium/Low performance bands are drawn from Google's annual State of DevOps reports and have shifted slightly between report years - the thresholds colored below are the commonly-cited rounded values, not a fixed standard._"
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Deployment Frequency - events-service",
+          "gridPos": { "x": 0, "y": 3, "w": 8, "h": 4 },
+          "id": 1,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_deployment_frequency_per_day{service=\"events-service\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "decimals": 2,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "orange", "value": 0.033 },
+                  { "color": "yellow", "value": 0.143 },
+                  { "color": "green", "value": 1 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Deployment Frequency - incidents-service",
+          "gridPos": { "x": 8, "y": 3, "w": 8, "h": 4 },
+          "id": 2,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_deployment_frequency_per_day{service=\"incidents-service\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "decimals": 2,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "orange", "value": 0.033 },
+                  { "color": "yellow", "value": 0.143 },
+                  { "color": "green", "value": 1 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Deployment Frequency - create-incident-job",
+          "gridPos": { "x": 16, "y": 3, "w": 8, "h": 4 },
+          "id": 3,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_deployment_frequency_per_day{service=\"create-incident-job\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "decimals": 2,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "orange", "value": 0.033 },
+                  { "color": "yellow", "value": 0.143 },
+                  { "color": "green", "value": 1 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Change Failure Rate - events-service",
+          "gridPos": { "x": 0, "y": 7, "w": 8, "h": 4 },
+          "id": 4,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_change_failure_rate{service=\"events-service\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 0.15 },
+                  { "color": "red", "value": 0.3 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Change Failure Rate - incidents-service",
+          "gridPos": { "x": 8, "y": 7, "w": 8, "h": 4 },
+          "id": 5,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_change_failure_rate{service=\"incidents-service\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 0.15 },
+                  { "color": "red", "value": 0.3 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Change Failure Rate - create-incident-job",
+          "gridPos": { "x": 16, "y": 7, "w": 8, "h": 4 },
+          "id": 6,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_change_failure_rate{service=\"create-incident-job\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 0.15 },
+                  { "color": "red", "value": 0.3 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "MTTR - events-service",
+          "gridPos": { "x": 0, "y": 11, "w": 8, "h": 4 },
+          "id": 7,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_mttr_seconds{service=\"events-service\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No rollback yet",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 3600 },
+                  { "color": "orange", "value": 86400 },
+                  { "color": "red", "value": 604800 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "MTTR - incidents-service",
+          "gridPos": { "x": 8, "y": 11, "w": 8, "h": 4 },
+          "id": 8,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_mttr_seconds{service=\"incidents-service\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No rollback yet",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 3600 },
+                  { "color": "orange", "value": 86400 },
+                  { "color": "red", "value": 604800 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "MTTR - create-incident-job",
+          "gridPos": { "x": 16, "y": 11, "w": 8, "h": 4 },
+          "id": 9,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_mttr_seconds{service=\"create-incident-job\"}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "noValue": "No rollback yet",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 3600 },
+                  { "color": "orange", "value": 86400 },
+                  { "color": "red", "value": 604800 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "row",
+          "title": "Trends",
+          "gridPos": { "x": 0, "y": 15, "w": 24, "h": 1 },
+          "id": 200,
+          "collapsed": false
+        },
+        {
+          "type": "timeseries",
+          "title": "Deployment Frequency (per day)",
+          "gridPos": { "x": 0, "y": 16, "w": 24, "h": 8 },
+          "id": 10,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_deployment_frequency_per_day", "legendFormat": "{{ `{{service}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "none" } }
+        },
+        {
+          "type": "timeseries",
+          "title": "Change Failure Rate",
+          "gridPos": { "x": 0, "y": 24, "w": 24, "h": 8 },
+          "id": 11,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_change_failure_rate", "legendFormat": "{{ `{{service}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "percentunit", "max": 1, "min": 0 } }
+        },
+        {
+          "type": "timeseries",
+          "title": "MTTR",
+          "gridPos": { "x": 0, "y": 32, "w": 24, "h": 8 },
+          "id": 12,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "dora_mttr_seconds", "legendFormat": "{{ `{{service}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        }
+      ]
+    }
