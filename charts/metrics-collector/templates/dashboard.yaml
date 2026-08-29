@@ -519,6 +519,39 @@ data:
               }
             ]
           }
+        },
+        {
+          "type": "timeseries",
+          "title": "events-service - key job durations (last 7 days)",
+          "gridPos": { "x": 0, "y": 83, "w": 24, "h": 8 },
+          "id": 23,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "pipeline_job_duration_avg_seconds{service=\"events-service\", job_name=~\"call-service-ci / CodeQL \\\\(SAST\\\\)|call-service-cd / Docker Build|call-service-ci / Integration Tests|call-service-cd / Container Vulnerability Scan|call-service-cd / Image Compliance Scan \\\\(CIS Docker Benchmark\\\\)|call-service-cd / Smoke Test \\\\(staging\\\\)|call-service-promotion / Smoke Test \\\\(production\\\\)\"}", "legendFormat": "{{ `{{job_name}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "type": "timeseries",
+          "title": "incidents-service - key job durations (last 7 days)",
+          "gridPos": { "x": 0, "y": 91, "w": 24, "h": 8 },
+          "id": 24,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "pipeline_job_duration_avg_seconds{service=\"incidents-service\", job_name=~\"call-service-ci / CodeQL \\\\(SAST\\\\)|call-service-cd / Docker Build|call-service-ci / Integration Tests|call-service-cd / Container Vulnerability Scan|call-service-cd / Image Compliance Scan \\\\(CIS Docker Benchmark\\\\)|call-service-cd / Smoke Test \\\\(staging\\\\)|call-service-promotion / Smoke Test \\\\(production\\\\)\"}", "legendFormat": "{{ `{{job_name}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "type": "timeseries",
+          "title": "create-incident-job - key job durations (last 7 days)",
+          "gridPos": { "x": 0, "y": 99, "w": 24, "h": 8 },
+          "id": 25,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "pipeline_job_duration_avg_seconds{service=\"create-incident-job\", job_name=~\"call-service-ci / CodeQL \\\\(SAST\\\\)|call-service-cd / Docker Build|call-service-ci / Integration Tests|call-service-cd / Container Vulnerability Scan|call-service-cd / Image Compliance Scan \\\\(CIS Docker Benchmark\\\\)|call-service-cd / Smoke Test \\\\(staging\\\\)|call-service-promotion / Smoke Test \\\\(production\\\\)\"}", "legendFormat": "{{ `{{job_name}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "s" } }
         }
       ]
     }
