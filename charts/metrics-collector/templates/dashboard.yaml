@@ -330,7 +330,7 @@ data:
             {
               "id": "organize",
               "options": {
-                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true },
+                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true, "container": true, "container 1": true, "container 2": true, "container 3": true, "endpoint": true, "endpoint 1": true, "endpoint 2": true, "endpoint 3": true, "namespace": true, "namespace 1": true, "namespace 2": true, "namespace 3": true, "pod": true, "pod 1": true, "pod 2": true, "pod 3": true },
                 "renameByName": { "job_name": "Job", "Value #A": "Avg Duration (s)", "Value #B": "P95 Duration (s)", "Value #C": "Success Rate" }
               }
             },
@@ -369,7 +369,7 @@ data:
             {
               "id": "organize",
               "options": {
-                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true },
+                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true, "container": true, "container 1": true, "container 2": true, "container 3": true, "endpoint": true, "endpoint 1": true, "endpoint 2": true, "endpoint 3": true, "namespace": true, "namespace 1": true, "namespace 2": true, "namespace 3": true, "pod": true, "pod 1": true, "pod 2": true, "pod 3": true },
                 "renameByName": { "job_name": "Job", "Value #A": "Avg Duration (s)", "Value #B": "P95 Duration (s)", "Value #C": "Success Rate" }
               }
             },
@@ -408,7 +408,7 @@ data:
             {
               "id": "organize",
               "options": {
-                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true },
+                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true, "container": true, "container 1": true, "container 2": true, "container 3": true, "endpoint": true, "endpoint 1": true, "endpoint 2": true, "endpoint 3": true, "namespace": true, "namespace 1": true, "namespace 2": true, "namespace 3": true, "pod": true, "pod 1": true, "pod 2": true, "pod 3": true },
                 "renameByName": { "job_name": "Job", "Value #A": "Avg Duration (s)", "Value #B": "P95 Duration (s)", "Value #C": "Success Rate" }
               }
             },
