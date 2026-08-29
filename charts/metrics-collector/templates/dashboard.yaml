@@ -306,6 +306,130 @@ data:
             { "expr": "dora_mttr_seconds", "legendFormat": "{{ `{{service}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
           ],
           "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "type": "row",
+          "title": "Pipeline Performance",
+          "gridPos": { "x": 0, "y": 40, "w": 24, "h": 1 },
+          "id": 300,
+          "collapsed": false
+        },
+        {
+          "type": "table",
+          "title": "events-service - job timing (last 7 days)",
+          "gridPos": { "x": 0, "y": 41, "w": 24, "h": 10 },
+          "id": 20,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "refId": "A", "expr": "pipeline_job_duration_avg_seconds{service=\"events-service\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "B", "expr": "pipeline_job_duration_p95_seconds{service=\"events-service\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "C", "expr": "pipeline_job_success_rate{service=\"events-service\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "transformations": [
+            { "id": "joinByField", "options": { "byField": "job_name", "mode": "outer" } },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true },
+                "renameByName": { "job_name": "Job", "Value #A": "Avg Duration (s)", "Value #B": "P95 Duration (s)", "Value #C": "Success Rate" }
+              }
+            },
+            { "id": "sortBy", "options": { "fields": {}, "sort": [{ "field": "P95 Duration (s)", "desc": true }] } }
+          ],
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              { "matcher": { "id": "byName", "options": "Avg Duration (s)" }, "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 1 }] },
+              { "matcher": { "id": "byName", "options": "P95 Duration (s)" }, "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 1 }] },
+              {
+                "matcher": { "id": "byName", "options": "Success Rate" },
+                "properties": [
+                  { "id": "unit", "value": "percentunit" },
+                  { "id": "decimals", "value": 1 },
+                  { "id": "custom.cellOptions", "value": { "type": "color-background" } },
+                  { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.8 }, { "color": "green", "value": 0.95 }] } }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "table",
+          "title": "incidents-service - job timing (last 7 days)",
+          "gridPos": { "x": 0, "y": 51, "w": 24, "h": 10 },
+          "id": 21,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "refId": "A", "expr": "pipeline_job_duration_avg_seconds{service=\"incidents-service\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "B", "expr": "pipeline_job_duration_p95_seconds{service=\"incidents-service\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "C", "expr": "pipeline_job_success_rate{service=\"incidents-service\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "transformations": [
+            { "id": "joinByField", "options": { "byField": "job_name", "mode": "outer" } },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true },
+                "renameByName": { "job_name": "Job", "Value #A": "Avg Duration (s)", "Value #B": "P95 Duration (s)", "Value #C": "Success Rate" }
+              }
+            },
+            { "id": "sortBy", "options": { "fields": {}, "sort": [{ "field": "P95 Duration (s)", "desc": true }] } }
+          ],
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              { "matcher": { "id": "byName", "options": "Avg Duration (s)" }, "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 1 }] },
+              { "matcher": { "id": "byName", "options": "P95 Duration (s)" }, "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 1 }] },
+              {
+                "matcher": { "id": "byName", "options": "Success Rate" },
+                "properties": [
+                  { "id": "unit", "value": "percentunit" },
+                  { "id": "decimals", "value": 1 },
+                  { "id": "custom.cellOptions", "value": { "type": "color-background" } },
+                  { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.8 }, { "color": "green", "value": 0.95 }] } }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "table",
+          "title": "create-incident-job - job timing (last 7 days)",
+          "gridPos": { "x": 0, "y": 61, "w": 24, "h": 10 },
+          "id": 22,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "refId": "A", "expr": "pipeline_job_duration_avg_seconds{service=\"create-incident-job\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "B", "expr": "pipeline_job_duration_p95_seconds{service=\"create-incident-job\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "C", "expr": "pipeline_job_success_rate{service=\"create-incident-job\"}", "instant": true, "format": "table", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "transformations": [
+            { "id": "joinByField", "options": { "byField": "job_name", "mode": "outer" } },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "job": true, "job 1": true, "job 2": true, "job 3": true, "instance": true, "instance 1": true, "instance 2": true, "instance 3": true, "service": true, "service 1": true, "service 2": true, "service 3": true, "__name__": true, "__name__ 1": true, "__name__ 2": true, "__name__ 3": true },
+                "renameByName": { "job_name": "Job", "Value #A": "Avg Duration (s)", "Value #B": "P95 Duration (s)", "Value #C": "Success Rate" }
+              }
+            },
+            { "id": "sortBy", "options": { "fields": {}, "sort": [{ "field": "P95 Duration (s)", "desc": true }] } }
+          ],
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              { "matcher": { "id": "byName", "options": "Avg Duration (s)" }, "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 1 }] },
+              { "matcher": { "id": "byName", "options": "P95 Duration (s)" }, "properties": [{ "id": "unit", "value": "s" }, { "id": "decimals", "value": 1 }] },
+              {
+                "matcher": { "id": "byName", "options": "Success Rate" },
+                "properties": [
+                  { "id": "unit", "value": "percentunit" },
+                  { "id": "decimals", "value": 1 },
+                  { "id": "custom.cellOptions", "value": { "type": "color-background" } },
+                  { "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.8 }, { "color": "green", "value": 0.95 }] } }
+                ]
+              }
+            ]
+          }
         }
       ]
     }
