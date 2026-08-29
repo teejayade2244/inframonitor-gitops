@@ -2,7 +2,7 @@ namespace: inframonitor-production
 serviceAccountName: create-incident-job-sa
 image:
   # CD overrides this via --set at deploy time, per release - never edit this file per release.
-  tag: b71cad4
+  tag: 6d96888
 env:
   # Same Cosmos account and Service Bus namespace as staging - only the database/topic names
   # differ, since the account/namespace itself is shared across environments.
