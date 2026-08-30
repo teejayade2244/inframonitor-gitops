@@ -552,6 +552,19 @@ data:
             { "expr": "pipeline_job_duration_avg_seconds{service=\"create-incident-job\", job_name=~\"call-service-ci / CodeQL \\\\(SAST\\\\)|call-service-cd / Docker Build|call-service-ci / Integration Tests|call-service-cd / Container Vulnerability Scan|call-service-cd / Image Compliance Scan \\\\(CIS Docker Benchmark\\\\)|call-service-cd / Smoke Test \\\\(staging\\\\)|call-service-promotion / Smoke Test \\\\(production\\\\)\"}", "legendFormat": "{{ `{{job_name}}` }}", "datasource": { "type": "prometheus", "uid": "prometheus" } }
           ],
           "fieldConfig": { "defaults": { "unit": "s" } }
+        },
+        {
+          "type": "timeseries",
+          "title": "Total pipeline wall-clock time vs. summed job durations (per service, last 7 days)",
+          "description": "Wall-clock is the real created_at-to-updated_at span of the whole CI/CD workflow run; summed jobs adds up every individual job's own duration over the same window. Summed jobs is expected to run higher - it double-counts time jobs spend running in parallel (e.g. the ci job matrix, or the two cd scan jobs) - so the gap between the two lines per service is the real time saved by parallel execution, not an error. summed jobs excludes the separate production-promotion workflow's own job names (call-service-promotion / ...), which are a structurally different pipeline.",
+          "gridPos": { "x": 0, "y": 107, "w": 24, "h": 8 },
+          "id": 26,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "refId": "A", "expr": "pipeline_total_duration_avg_seconds", "legendFormat": "{{ `{{service}}` }} - wall-clock", "datasource": { "type": "prometheus", "uid": "prometheus" } },
+            { "refId": "B", "expr": "sum by (service) (pipeline_job_duration_avg_seconds{job_name!~\"call-service-promotion.*\"})", "legendFormat": "{{ `{{service}}` }} - summed jobs", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "fieldConfig": { "defaults": { "unit": "s" } }
         }
       ]
     }
