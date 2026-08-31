@@ -1,7 +1,7 @@
 namespace: inframonitor
 serviceAccountName: metrics-collector-sa
 image:
-  tag: e0babf2
+  tag: 51c8efa
 # Matches the GitHub Actions cron schedule this replaces exactly.
 schedule: "*/15 * * * *"
 env:
