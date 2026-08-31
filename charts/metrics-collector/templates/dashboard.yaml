@@ -554,17 +554,82 @@ data:
           "fieldConfig": { "defaults": { "unit": "s" } }
         },
         {
-          "type": "timeseries",
-          "title": "Total pipeline wall-clock time vs. summed job durations (per service, last 7 days)",
-          "description": "Wall-clock is the real created_at-to-updated_at span of the whole CI/CD workflow run; summed jobs adds up every individual job's own duration over the same window. Summed jobs is expected to run higher - it double-counts time jobs spend running in parallel (e.g. the ci job matrix, or the two cd scan jobs) - so the gap between the two lines per service is the real time saved by parallel execution, not an error. summed jobs excludes the separate production-promotion workflow's own job names (call-service-promotion / ...), which are a structurally different pipeline.",
-          "gridPos": { "x": 0, "y": 107, "w": 24, "h": 8 },
+          "type": "stat",
+          "title": "Parallelism Savings - events-service",
+          "description": "How much of the CI/CD pipeline's job time is actually saved by running jobs in parallel: (summed per-job durations - real wall-clock time) / summed per-job durations, over the last 7 days. Wall-clock is the run's real created_at-to-updated_at span; summed jobs excludes the separate production-promotion workflow's own jobs, a structurally different pipeline.",
+          "gridPos": { "x": 0, "y": 107, "w": 8, "h": 4 },
           "id": 26,
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "targets": [
-            { "refId": "A", "expr": "pipeline_total_duration_avg_seconds", "legendFormat": "{{ `{{service}}` }} - wall-clock", "datasource": { "type": "prometheus", "uid": "prometheus" } },
-            { "refId": "B", "expr": "sum by (service) (pipeline_job_duration_avg_seconds{job_name!~\"call-service-promotion.*\"})", "legendFormat": "{{ `{{service}}` }} - summed jobs", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+            { "expr": "(sum by (service) (pipeline_job_duration_avg_seconds{service=\"events-service\", job_name!~\"call-service-promotion.*\"}) - on(service) pipeline_total_duration_avg_seconds{service=\"events-service\"}) / sum by (service) (pipeline_job_duration_avg_seconds{service=\"events-service\", job_name!~\"call-service-promotion.*\"}) * 100", "datasource": { "type": "prometheus", "uid": "prometheus" } }
           ],
-          "fieldConfig": { "defaults": { "unit": "s" } }
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "orange", "value": 0 },
+                  { "color": "green", "value": 10 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Parallelism Savings - incidents-service",
+          "description": "How much of the CI/CD pipeline's job time is actually saved by running jobs in parallel: (summed per-job durations - real wall-clock time) / summed per-job durations, over the last 7 days. Wall-clock is the run's real created_at-to-updated_at span; summed jobs excludes the separate production-promotion workflow's own jobs, a structurally different pipeline.",
+          "gridPos": { "x": 8, "y": 107, "w": 8, "h": 4 },
+          "id": 27,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "(sum by (service) (pipeline_job_duration_avg_seconds{service=\"incidents-service\", job_name!~\"call-service-promotion.*\"}) - on(service) pipeline_total_duration_avg_seconds{service=\"incidents-service\"}) / sum by (service) (pipeline_job_duration_avg_seconds{service=\"incidents-service\", job_name!~\"call-service-promotion.*\"}) * 100", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "orange", "value": 0 },
+                  { "color": "green", "value": 10 }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "type": "stat",
+          "title": "Parallelism Savings - create-incident-job",
+          "description": "How much of the CI/CD pipeline's job time is actually saved by running jobs in parallel: (summed per-job durations - real wall-clock time) / summed per-job durations, over the last 7 days. Wall-clock is the run's real created_at-to-updated_at span; summed jobs excludes the separate production-promotion workflow's own jobs, a structurally different pipeline.",
+          "gridPos": { "x": 16, "y": 107, "w": 8, "h": 4 },
+          "id": 28,
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "targets": [
+            { "expr": "(sum by (service) (pipeline_job_duration_avg_seconds{service=\"create-incident-job\", job_name!~\"call-service-promotion.*\"}) - on(service) pipeline_total_duration_avg_seconds{service=\"create-incident-job\"}) / sum by (service) (pipeline_job_duration_avg_seconds{service=\"create-incident-job\", job_name!~\"call-service-promotion.*\"}) * 100", "datasource": { "type": "prometheus", "uid": "prometheus" } }
+          ],
+          "options": { "colorMode": "background", "graphMode": "none", "reduceOptions": { "calcs": ["lastNotNull"] } },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "red", "value": null },
+                  { "color": "orange", "value": 0 },
+                  { "color": "green", "value": 10 }
+                ]
+              }
+            }
+          }
         }
       ]
     }
